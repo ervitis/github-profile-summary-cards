@@ -52,11 +52,13 @@ const main = async () => {
 
   let isInGithubAction = false;
 
+  core.info(`length= ${process.env.length}`)
+
   if (process.argv.length == 2) {
     try {
       args.username = core.getInput("USERNAME");
       args.theme = core.getInput("THEME")
-      console.log(`Using github actions ${args.username} and ${args.theme}`)
+      core.info(`Using github actions ${args.theme}`)
       isInGithubAction = true;
     } catch (error) {
       throw Error(error.message);
