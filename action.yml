@@ -7,6 +7,9 @@ inputs:
     required: true
     description: 'GitHub username'
     default: ${{ github.repository_owner }}
+  THEME:
+    required: false
+    description: 'Theme to choose'
 
 runs:
   using: 'node12'
