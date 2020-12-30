@@ -1,6 +1,6 @@
-name: GitHub-Profile-Summary-Cards
+name: GitHub-Profile-Summary-Cards-v2
 description: Generate profile summary cards and commit to default branch
-author: vn7n24fzkq
+author: ervitis
 
 inputs:
   USERNAME:
