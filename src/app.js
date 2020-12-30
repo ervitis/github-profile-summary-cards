@@ -52,9 +52,10 @@ const main = async () => {
 
   let isInGithubAction = false;
 
-  if (process.argv.length == 2) {
+  if (process.argv.length >= 2) {
     try {
-      core.getInput("USERNAME");
+      args.username = core.getInput("USERNAME");
+      args.theme = core.getInput("THEME")
       isInGithubAction = true;
     } catch (error) {
       throw Error(error.message);
