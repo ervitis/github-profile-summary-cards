@@ -56,6 +56,7 @@ const main = async () => {
     try {
       args.username = core.getInput("USERNAME");
       args.theme = core.getInput("THEME")
+      console.log(`Using github actions ${args.username} and ${args.theme}`)
       isInGithubAction = true;
     } catch (error) {
       throw Error(error.message);
