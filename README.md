@@ -43,6 +43,14 @@ Action already setup In this template, you just need click `use this template bu
 
 Then you can use everything in `profile-summary-card-output` folder.
 
+You can pass the template you want to generate in the program arguments. For example:
+
+```bash
+$ npm run run [USERNAME] --theme [theme]
+```
+
+The theme could be: default, vue, solarized, solarized_dark, dracula, monokai, nord_bright, nord_dark, github
+
 ---
 
 ## Wiki
@@ -80,7 +88,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: vn7n24fzkq/github-profile-summary-cards@release
+      - uses: ervitis/github-profile-summary-cards@release
         env: # default use ${{ secrets.GITHUB_TOKEN }}, you can change to your personal access token
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

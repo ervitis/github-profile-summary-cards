@@ -5,11 +5,11 @@ const createDonutChartCard = require("../templates/donut-chart-card");
 const getProfileDetails = require("../github-api/profile-details");
 const { writeSVG, outputPath } = require("../utils/file-writer");
 
-const createCommitsPerLanguageCard = async function (username) {
-  let userDetails = await getProfileDetails(username);
+const createCommitsPerLanguageCard = async function (args) {
+  let userDetails = await getProfileDetails(args.username);
   let langMap = new Map();
   for (let year of userDetails.contributionYears) {
-    let map = await getCommitLanguage(username, year);
+    let map = await getCommitLanguage(args.username, year);
     for (let [key, value] of map) {
       if (langMap.has(key)) {
         let lang = langMap.get(key);
@@ -36,6 +36,17 @@ const createCommitsPerLanguageCard = async function (username) {
     return b.value - a.value;
   });
   langData = langData.slice(0, 5); //get top 5
+
+  if (args.theme) {
+    let svgString = createDonutChartCard(
+      "Top Languages by Commit",
+      langData,
+      Themes[args.theme]
+    );
+    //output to folder, use 2- prefix for sort in preview
+    writeSVG(args.theme, "2-most-commit-language", svgString);
+    return
+  }
 
   for (let themeName in Themes) {
     let theme = Themes[themeName];

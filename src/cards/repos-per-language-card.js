@@ -4,8 +4,8 @@ const getRepoLanguage = require("../github-api/repos-per-language");
 const createDonutChartCard = require("../templates/donut-chart-card");
 const { writeSVG, outputPath } = require("../utils/file-writer");
 
-const createReposPerLanguageCard = async function (username) {
-  let langMap = await getRepoLanguage(username);
+const createReposPerLanguageCard = async function (args) {
+  let langMap = await getRepoLanguage(args.username);
   let langData = [];
 
   //make a pie data
@@ -20,6 +20,17 @@ const createReposPerLanguageCard = async function (username) {
     return b.value - a.value;
   });
   langData = langData.slice(0, 5); //get top 5
+
+  if (args.theme) {
+    let svgString = createDonutChartCard(
+      "Top Languages by Repo",
+      langData,
+      Themes[args.theme]
+    );
+    //output to folder, use 1- prefix for sort in preview
+    writeSVG(args.theme, "1-repos-per-language", svgString);
+    return
+  }
 
   for (let themeName in Themes) {
     let theme = Themes[themeName];

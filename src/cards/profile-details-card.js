@@ -7,11 +7,11 @@ const getContributionByYear = require("../github-api/contributions-by-year");
 const createDetailCard = require("../templates/profile-details-card");
 const { writeSVG, outputPath } = require("../utils/file-writer");
 
-const createProfileDetailsCard = async function (username) {
-  let userDetails = await getProfileDetails(username);
+const createProfileDetailsCard = async function (args) {
+  let userDetails = await getProfileDetails(args.username);
   let totalContributions = 0;
   for (let year of userDetails.contributionYears) {
-    totalContributions += (await getContributionByYear(username, year))
+    totalContributions += (await getContributionByYear(args.username, year))
       .totalContributions;
   }
   let numAbbr = new NumAbbr();
@@ -67,21 +67,33 @@ const createProfileDetailsCard = async function (username) {
   }
 
   let contributionsData = userDetails.contributions;
+  let svgString
+  let title = userDetails.name == null
+      ? `${args.username}`
+      : `${args.username} (${userDetails.name})`;
+
+  if (args.theme) {
+    svgString = createDetailCard(
+      `${title}`,
+      details,
+      contributionsData,
+      Themes[args.theme]
+    );
+    //output to folder, use 0- prefix for sort in preview
+    writeSVG(args.theme, "0-profile-details", svgString);
+    return
+  }
 
   for (let themeName in Themes) {
     let theme = Themes[themeName];
-    let title =
-      userDetails.name == null
-        ? `${username}`
-        : `${username} (${userDetails.name})`;
-    let svgString = createDetailCard(
+    svgString = createDetailCard(
       `${title}`,
       details,
       contributionsData,
       theme
     );
     //output to folder, use 0- prefix for sort in preview
-    writeSVG(themeName, "0-profile-details", svgString);
+    writeSVG(theme, "0-profile-details", svgString);
   }
 };
 

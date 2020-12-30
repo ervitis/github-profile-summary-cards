@@ -22,7 +22,8 @@
     "dotenv": "^8.2.0",
     "jsdom": "^16.4.0",
     "moment": "^2.27.0",
-    "number-abbreviate": "^2.0.0"
+    "number-abbreviate": "^2.0.0",
+    "yargs": "^16.2.0"
   },
   "devDependencies": {
     "axios-mock-adapter": "^1.18.2",

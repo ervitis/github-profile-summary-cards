@@ -5,6 +5,7 @@ const createCommitsPerLanguageCard = require("./cards/most-commit-lauguage-card"
 const createStatsCard = require("./cards/stats-card");
 const { spawn } = require("child_process");
 const { outputPath, generatePreviewMarkdown } = require("./utils/file-writer");
+const Argparser = require('./utils/argparser')
 
 const execCmd = (cmd, args = []) =>
   new Promise((resolve, reject) => {
@@ -47,17 +48,19 @@ const commitFile = async () => {
 // main
 const main = async () => {
   core.info(`Start...`);
-  let username = process.argv[2];
+  const args = new Argparser().parse(process.argv);
+
   let isInGithubAction = false;
 
   if (process.argv.length == 2) {
     try {
-      username = core.getInput("USERNAME");
+      core.getInput("USERNAME");
       isInGithubAction = true;
     } catch (error) {
       throw Error(error.message);
     }
   }
+
   try {
     //remove old output
     if (isInGithubAction) {
@@ -66,31 +69,31 @@ const main = async () => {
     }
     try {
       core.info(`Creating ProfileDetailsCard...`);
-      await createProfileDetailsCard(username);
+      await createProfileDetailsCard(args);
     } catch (error) {
       core.error(`Error when creating ProfileDetailsCard \n${error}`);
     }
     try {
       core.info(`Creating ReposPerLanguageCard...`);
-      await createReposPerLanguageCard(username);
+      await createReposPerLanguageCard(args);
     } catch (error) {
       core.error(`Error when creating ReposPerLanguageCard \n${error}`);
     }
     try {
       core.info(`Creating CommitsPerLanguageCard...`);
-      await createCommitsPerLanguageCard(username);
+      await createCommitsPerLanguageCard(args);
     } catch (error) {
       core.error(`Error when creating CommitsPerLanguageCard \n${error}`);
     }
     try {
       core.info(`Creating StatsCard...`);
-      await createStatsCard(username);
+      await createStatsCard(args);
     } catch (error) {
       core.error(`Error when creating StatsCard \n${error}`);
     }
     try {
       core.info(`Creating preview markdown...`);
-      await generatePreviewMarkdown(isInGithubAction);
+      await generatePreviewMarkdown(isInGithubAction, args);
     } catch (error) {
       core.error(`Error when creating preview markdown \n${error}`);
     }

@@ -6,15 +6,15 @@ const getContributionByYear = require("../github-api/contributions-by-year");
 const statsCard = require("../templates/stats-card");
 const { writeSVG, outputPath } = require("../utils/file-writer");
 
-const createStatsCard = async function (username) {
-  let userDetails = await getProfileDetails(username);
+const createStatsCard = async function (args) {
+  let userDetails = await getProfileDetails(args.username);
   let totalStars = userDetails.totalStars;
   let totalCommitContributions = 0;
   let totalPullRequestContributions = 0;
   let totalIssueContributions = 0;
   let totalRepositoryContributions = 0;
   for (let year of userDetails.contributionYears) {
-    let contributions = await getContributionByYear(username, year);
+    let contributions = await getContributionByYear(args.username, year);
     totalCommitContributions += contributions.totalCommitContributions;
     totalPullRequestContributions +=
       contributions.totalPullRequestContributions;
@@ -55,10 +55,16 @@ const createStatsCard = async function (username) {
     },
   ];
 
+  if (args.theme) {
+    let svgString = statsCard("Stats", statsData, Themes[args.theme]);
+    //output to folder, use 3- prefix for sort in preview
+    writeSVG(args.theme, "3-stats", svgString);
+    return
+  }
+
   for (let themeName in Themes) {
     let theme = Themes[themeName];
-    let title = "Stats";
-    let svgString = statsCard(`${title}`, statsData, theme);
+    let svgString = statsCard("Stats", statsData, theme);
     //output to folder, use 3- prefix for sort in preview
     writeSVG(themeName, "3-stats", svgString);
   }

@@ -28,7 +28,7 @@ function getAllFileInFolder(folder) {
   return files;
 }
 
-const generatePreviewMarkdown = function (isInGithubAction) {
+const generatePreviewMarkdown = function (isInGithubAction, args) {
   let targetFolder = `${outputPath}`;
   let readmeContent = "";
   let urlPrefix = isInGithubAction
@@ -45,19 +45,35 @@ Here are all cards with themes.
 
 `;
 
-  for (let themeName in Themes) {
+  if (args.theme) {
     readmeContent += `
+### ${args.theme}
+
+`;
+    for (let file of getAllFileInFolder(targetFolder + args.theme)) {
+      readmeContent += `
+\`\`\`
+[![](${urlPrefix}/${args.theme}/${file})](https://github.com/${args.username}/github-profile-summary-cards)
+\`\`\`
+![](${urlPrefix}/${args.theme}/${file})
+
+`;
+    }
+  } else {
+    for (let themeName in Themes) {
+      readmeContent += `
 ### ${themeName}
 
 `;
-    for (let file of getAllFileInFolder(targetFolder + themeName)) {
-      readmeContent += `
+      for (let file of getAllFileInFolder(targetFolder + themeName)) {
+        readmeContent += `
 \`\`\`
 [![](${urlPrefix}/${themeName}/${file})](https://github.com/vn7n24fzkq/github-profile-summary-cards)
 \`\`\`
 ![](${urlPrefix}/${themeName}/${file})
 
 `;
+      }
     }
   }
 
