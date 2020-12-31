@@ -68,6 +68,7 @@ const main = async () => {
   try {
     //remove old output
     if (isInGithubAction) {
+      core.info(`Will I see this? ${args.theme}`)
       core.info(`Remove old cards...`);
       await execCmd("sudo", ["rm", "-rf", outputPath]);
     }
