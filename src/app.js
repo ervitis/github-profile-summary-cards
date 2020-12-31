@@ -52,13 +52,13 @@ const main = async () => {
 
   let isInGithubAction = false;
 
-  core.info(`length= ${process.env.length}`)
+  core.warning(`length= ${process.env.length}`)
 
   if (process.argv.length == 2) {
     try {
       args.username = core.getInput("USERNAME");
       args.theme = core.getInput("THEME")
-      core.info(`Using github actions ${args.theme}`)
+      core.warning(`Using github actions ${args.theme}`)
       isInGithubAction = true;
     } catch (error) {
       throw Error(error.message);
@@ -68,7 +68,7 @@ const main = async () => {
   try {
     //remove old output
     if (isInGithubAction) {
-      core.info(`Will I see this? ${args.theme}`)
+      core.warning(`Will I see this? ${args.theme}`)
       core.info(`Remove old cards...`);
       await execCmd("sudo", ["rm", "-rf", outputPath]);
     }
